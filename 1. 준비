@@ -1,0 +1,145 @@
+1. node.js 설치
+2. 터미널에서 아래 명령어로 타입스크립트 컴파일러 설치
+    npm install -g typescript
+
+    오류 발생 시 node.js를 최신버전으로 재설치 해본다. 또는 관리자 권한으로 실행한다.
+
+3. .ts 파일을 만든 다음 코드를 작성하고 tsc -w 명령어 입력 -> 자동으로 js파일로 변환
+
+4. html 파일에서 .js파일 사용
+    <script src="변환된파일.js"></script>
+
+
+5. 기존 리액트 프로젝트에 typescript 설치
+npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+
+yarn 1버전이 설치되어있으면 npm install 대신 yarn add라는 명령어 쓸 수 있따.
+
+그냥 애초에 처음부터 Typescript 적용된 React 프로젝트를 생성할 수도 있다. 
+
+
+6. 타입스크립트로 신규 리액트 프로젝트 생성
+    npx create-react-app my-app --template typescript
+
+
+
+
+7. 타입스크립트 용례
+
+7.1. 변수선언
+
+    let 이름 :string = 'kim'
+
+    변수를 만들 때 타입지정이 가능하다. 
+
+    변수명 : 타입명 
+
+    타입으로 쓸 수 있는 것들은 string, number, boolean, bigint, null, undefined, [], {} 등이 있다. 
+
+
+7.2. 배열이나 오브젝트형의 경우
+
+    let 이름 :string[] = ['kim', 'park']
+    let 나이 :{ age : number } = { age : number }
+
+
+7.3. 변수에 여러 타입의 데이터가 들어올 수 있는 경우
+
+    let 이름 :string | number = 'kim';
+
+    변수에 여러가지 타입의 데이터가 들어올 수 있다면 | 기호를 이용해 or 연산자를 표현할 수 있다. 
+    위 예제는 변수에 숫자 혹은 문자를 집어넣을 수 있게 됩니다. 
+
+7.4. type 키워드를 이용해 타입을 변수처럼 담아서 사용가능
+
+    type nameType = string | number;
+    let 이름 :nameType = 'kim';
+
+
+7.5. 리터럴 타입(Literal type)
+
+        type NameType = 'kim' | 'park;
+        let 이름 :NameType = 'kim';
+
+string number 이런 것 뿐만 아니라 나만의 타입을 만들어 사용가능하다.
+위처럼 원하는 글자나 숫자를 입력하면 이름이라는 변수엔 앞으로 'kim' 또는 'park'만 들어올 수 있다.
+이러한 타입을 literal type이라고 부른다. 
+
+ 
+8. 함수 선언
+
+8.1. 기본적인 함수 선언
+
+    function 함수명(x :number) :number{
+        return x * 2
+    }
+
+8.2. 변수의 타입이 확실하지 않은 경우의 연산
+
+    //에러
+    function 함수명(x :number | string) {
+        return x * 2
+    }
+
+    //가능
+    function 함수명(x :number | string) {
+        if (typeof x === 'number'){
+            return x * 2
+        } 
+    }
+
+    타입스크립트는 지금 변수의 타입이 확실하지 않으면 마음대로 연산할 수 없다. 
+    항상 타입이 무엇인지 미리 체크하는 narrowing 또는 assertion 문법을 사용해야 허락해준다. 
+
+
+9. array 자료 안에 순서를 포함해서 어떤 자료가 들어올지 정확히 지정하고 싶은 경우
+
+    type Member = [number, boolean];
+    let john:Member = [100, false]
+
+    tuple 타입을 쓰면 된다. 대괄호 [ ] 안에 들어올 자료의 타입을 차례로 적어주면 된다. 
+
+
+10. object 타입도 정의가 너무 길면 type 키워드로 변수에 담아 사용가능
+
+    type MyObject = {
+    name? : string,
+    age : number
+    }
+
+    let 철수 :MyObject = { 
+    name : 'kim',
+    age : 50
+    }
+
+    object 타입도 정의가 너무 길면 type 키워드로 변수에 담아 사용가능하다. 
+    type 키워드 대신 비교적 최근에 나온 interface 키워드를 이용해도 무방하다. 차이점은 별로 없다. 
+
+    특정 속성이 선택사항이면 물음표를 기입가능하다. 
+
+
+11. Object 안에 어떤 속성이 들어갈지 모르는 경우
+
+    type MyObject = {
+        [key :string] : number,
+    }
+
+    let 철수 :MyObject = { 
+        age : 50,
+        weight : 100,
+    }
+
+object안에 어떤 속성이 들어갈지 아직 모른다면 그냥 전부 싸잡아서 타입지정도 가능하다. 
+index signature라고 한다. 
+
+ 
+12. 타입스크립트의 클래스 선언
+
+class Person {
+  name;
+  constructor(name :string){
+    this.name = name;
+  }
+}
+
+class도 타입설정이 가능하다. 다만 중괄호 내에 미리 name 이렇게 변수를 만들어놔야 constructor 안에서 this.name 이렇게 사용가능하다.
